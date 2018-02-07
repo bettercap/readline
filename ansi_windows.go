@@ -5,8 +5,8 @@ package readline
 import (
 	"bufio"
 	"io"
-	//	"strconv"
-	//	"strings"
+	"strconv"
+	"strings"
 	"sync"
 	"unicode/utf8"
 	"unsafe"
@@ -120,7 +120,7 @@ func (a *ANSIWriterCtx) process(r rune) bool {
 
 func (a *ANSIWriterCtx) ioloopEscSeq(w *bufio.Writer, r rune, argptr *[]string) bool {
 	arg := *argptr
-	// var err error
+	var err error
 
 	if r >= 'A' && r <= 'D' {
 		count := short(GetInt(arg, 1))
@@ -147,35 +147,33 @@ func (a *ANSIWriterCtx) ioloopEscSeq(w *bufio.Writer, r rune, argptr *[]string) 
 		killLines()
 	case 'K':
 		eraseLine()
-	/*
-		case 'm':
-			color := word(0)
-			for _, item := range arg {
-				var c int
-				c, err = strconv.Atoi(item)
-				if err != nil {
-					w.WriteString("[" + strings.Join(arg, ";") + "m")
-					break
-				}
-				if c >= 30 && c < 40 {
-					color ^= COLOR_FINTENSITY
-					color |= ColorTableFg[c-30]
-				} else if c >= 40 && c < 50 {
-					color ^= COLOR_BINTENSITY
-					color |= ColorTableBg[c-40]
-				} else if c == 4 {
-					color |= COMMON_LVB_UNDERSCORE | ColorTableFg[7]
-				} else if c == 1 {
-					color |= COMMON_LVB_BOLD | COLOR_FINTENSITY
-				} else { // unknown code treat as reset
-					color = ColorTableFg[7]
-				}
-			}
+	case 'm':
+		color := word(0)
+		for _, item := range arg {
+			var c int
+			c, err = strconv.Atoi(item)
 			if err != nil {
+				w.WriteString("[" + strings.Join(arg, ";") + "m")
 				break
 			}
-			kernel.SetConsoleTextAttribute(stdout, uintptr(color))
-	*/
+			if c >= 30 && c < 40 {
+				color ^= COLOR_FINTENSITY
+				color |= ColorTableFg[c-30]
+			} else if c >= 40 && c < 50 {
+				color ^= COLOR_BINTENSITY
+				color |= ColorTableBg[c-40]
+			} else if c == 4 {
+				color |= COMMON_LVB_UNDERSCORE | ColorTableFg[7]
+			} else if c == 1 {
+				color |= COMMON_LVB_BOLD | COLOR_FINTENSITY
+			} else { // unknown code treat as reset
+				color = ColorTableFg[7]
+			}
+		}
+		if err != nil {
+			break
+		}
+		kernel.SetConsoleTextAttribute(stdout, uintptr(color))
 	case '\007': // set title
 	case ';':
 		if len(arg) == 0 || arg[len(arg)-1] != "" {
