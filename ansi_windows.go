@@ -120,7 +120,7 @@ func (a *ANSIWriterCtx) process(r rune) bool {
 
 func (a *ANSIWriterCtx) ioloopEscSeq(w *bufio.Writer, r rune, argptr *[]string) bool {
 	arg := *argptr
-	var err error
+	// var err error
 
 	if r >= 'A' && r <= 'D' {
 		count := short(GetInt(arg, 1))
