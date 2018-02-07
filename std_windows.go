@@ -6,6 +6,6 @@ import "os"
 
 func init() {
 	Stdin = os.Stdin
-	Stdout = NewANSIWriter(Stdout)
-	Stderr = NewANSIWriter(Stderr)
+	Stdout = NewANSIWriter(os.Stdout)
+	Stderr = NewANSIWriter(os.Stderr)
 }
