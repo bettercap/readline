@@ -2,8 +2,10 @@
 
 package readline
 
+import "os"
+
 func init() {
-	Stdin = NewRawReader()
+	Stdin = os.Stdin
 	Stdout = NewANSIWriter(Stdout)
 	Stderr = NewANSIWriter(Stderr)
 }
