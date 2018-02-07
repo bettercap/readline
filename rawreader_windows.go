@@ -47,11 +47,18 @@ func (r *RawReader) Read(buf []byte) (int, error) {
 
 	pread := &read
 next:
-	err = kernel.ReadConsoleInputW(stdin,
-		uintptr(unsafe.Pointer(ir)),
-		1,
-		uintptr(unsafe.Pointer(pread)),
-	)
+	/*
+		err = kernel.ReadConsoleInputW(stdin,
+			uintptr(unsafe.Pointer(ir)),
+			1,
+			uintptr(unsafe.Pointer(pread)),
+		)
+		if err != nil {
+			fmt.Printf("\nerr=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
+			return 0, err
+		}
+	*/
+	r1, r2, err := kernel.ReadConsoleIputW.Call(stdin, uintptr(unsafe.Pointer(ir)), uintptr(1), uintptr(unsafe.Pointer(pread)))
 	if err != nil {
 		fmt.Printf("\nerr=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
 		return 0, err

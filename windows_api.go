@@ -19,10 +19,10 @@ type Kernel struct {
 	SetConsoleTextAttribute,
 	FillConsoleOutputCharacterW,
 	FillConsoleOutputAttribute,
-	ReadConsoleInputW,
 	GetConsoleScreenBufferInfo,
 	GetConsoleCursorInfo,
 	GetStdHandle CallFunc
+	ReadConsoleInputW *syscall.LazyProc
 }
 
 type short int16
@@ -97,7 +97,11 @@ func NewKernel() *Kernel {
 	for i := 0; i < t.NumField(); i++ {
 		name := t.Field(i).Name
 		f := kernel32.NewProc(name)
-		v.Field(i).Set(reflect.ValueOf(k.Wrap(f)))
+		if name == "ReadConsoleInputW" {
+			v.Field(i).Set(reflect.ValueOf(f))
+		} else {
+			v.Field(i).Set(reflect.ValueOf(k.Wrap(f)))
+		}
 	}
 	return k
 }
