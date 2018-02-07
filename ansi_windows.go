@@ -5,8 +5,8 @@ package readline
 import (
 	"bufio"
 	"io"
-	"strconv"
-	"strings"
+	//	"strconv"
+	//	"strings"
 	"sync"
 	"unicode/utf8"
 	"unsafe"
