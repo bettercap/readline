@@ -45,7 +45,7 @@ func (r *RawReader) Read(buf []byte) (int, error) {
 	var read int
 	var err error
 
-	pread = &read
+	pread := &read
 next:
 	err = kernel.ReadConsoleInputW(stdin,
 		uintptr(unsafe.Pointer(ir)),
