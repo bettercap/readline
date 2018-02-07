@@ -2,7 +2,10 @@
 
 package readline
 
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 const (
 	VK_CANCEL   = 0x03
@@ -41,13 +44,16 @@ func (r *RawReader) Read(buf []byte) (int, error) {
 	ir := new(_INPUT_RECORD)
 	var read int
 	var err error
+
+	pread = &read
 next:
 	err = kernel.ReadConsoleInputW(stdin,
 		uintptr(unsafe.Pointer(ir)),
 		1,
-		uintptr(unsafe.Pointer(&read)),
+		uintptr(unsafe.Pointer(pread)),
 	)
 	if err != nil {
+		fmt.Printf("\nerr=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
 		return 0, err
 	}
 	if ir.EventType != EVENT_KEY {
