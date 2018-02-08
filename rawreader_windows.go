@@ -3,7 +3,7 @@
 package readline
 
 import (
-	// "fmt"
+	"fmt"
 	"unsafe"
 )
 
