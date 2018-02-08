@@ -41,7 +41,7 @@ func NewRawReader() *RawReader {
 
 // only process one action in one read
 func (r *RawReader) Read(buf []byte) (int, error) {
-	ir := new(_INPUT_RECORD)
+	irArr := make([]_INPUT_RECORD, 1)
 	var read int
 	var err error
 
@@ -58,7 +58,8 @@ next:
 			return 0, err
 		}
 	*/
-	_, _, err = kernel.ReadConsoleInputW.Call(stdin, uintptr(unsafe.Pointer(ir)), uintptr(1), uintptr(unsafe.Pointer(pread)))
+	_, _, err = kernel.ReadConsoleInputW.Call(stdin, uintptr(unsafe.Pointer(&irArr[0])), uintptr(1), uintptr(unsafe.Pointer(pread)))
+	ir := irArr[0]
 	if err != nil {
 		fmt.Printf("\nReadConsoleInputW: err=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
 		return 0, err
