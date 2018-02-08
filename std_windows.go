@@ -2,10 +2,18 @@
 
 package readline
 
-import "os"
+import (
+	"os"
+	"os/exec"
+)
 
 func init() {
-	Stdin = NewRawReader() // os.Stdin
+	//no buffering
+	exec.Command("stty", "cbreak", "min", "1").Run()
+	//no visible output
+	exec.Command("stty", "-echo").Run()
+
+	Stdin = os.Stdin
 	Stdout = os.Stdout
 	Stderr = os.Stderr
 }
