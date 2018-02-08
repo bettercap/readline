@@ -63,7 +63,6 @@ type _KEY_EVENT_RECORD struct {
 // FOCUS_EVENT_RECORD        FocusEvent;
 type _INPUT_RECORD struct {
 	EventType word
-	Padding   uint16
 	Event     [16]byte
 }
 
