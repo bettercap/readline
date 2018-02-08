@@ -58,9 +58,9 @@ next:
 			return 0, err
 		}
 	*/
-	_, _, err = kernel.ReadConsoleInputW.Call(stdin, uintptr(unsafe.Pointer(&irArr[0])), uintptr(1), uintptr(unsafe.Pointer(pread)))
+	r1, _, err = kernel.ReadConsoleInputW.Call(stdin, uintptr(unsafe.Pointer(&irArr[0])), uintptr(1), uintptr(unsafe.Pointer(pread)))
 	ir := irArr[0]
-	if err != nil {
+	if r1 == 0 && err != nil {
 		fmt.Printf("\nReadConsoleInputW: err=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
 		return 0, err
 	}
