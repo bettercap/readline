@@ -61,8 +61,10 @@ next:
 	_, _, err = kernel.ReadConsoleInputW.Call(stdin, uintptr(unsafe.Pointer(ir)), uintptr(1), uintptr(unsafe.Pointer(pread)))
 	if err != nil {
 		fmt.Printf("\nReadConsoleInputW: err=%v ir=%v read=%v pread=%v\n", err, ir, read, pread)
-		return 0, err
+		goto next
+		// return 0, err
 	}
+
 	if ir.EventType != EVENT_KEY {
 		goto next
 	}
